@@ -9,8 +9,10 @@ categories:
       - 'bugfix'
       - 'bug'
 change-template: '* $TITLE — #$NUMBER'
-template: $CHANGES
+template: |
+  ## Changes
 
+  $CHANGES
 autolabeler:
   - label: 'bug'
     branch:

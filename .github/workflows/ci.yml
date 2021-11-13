@@ -26,34 +26,11 @@ jobs:
       - name: Ensure SHA pinned actions are used
         uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43 #1.0.4
 
-  generate:
-    name: Generate
-    runs-on: ubuntu-latest
-    needs:
-      - security
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
-      - name: Read FVM config
-        uses: kuhnroyal/flutter-fvm-config-action@c9c8517695e8de668802224f4fd867a99ff633b8 #0.0.2
-      - name: Setup Flutter
-        uses: subosito/flutter-action@4389e6cbc6cb8a4b18c628ff96ff90be0e926aa8 #1.5.3
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: ${{ env.FLUTTER_CHANNEL }}
-      - name: Cache build-runner generated files
-        id: generate-build-runner
-        uses: ./.github/actions/cache-build-runner
-      - run: flutter pub get
-      - if: steps.generate-build-runner.outputs.cache-hit != 'true'
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
     needs:
       - security
-      - generate
     steps:
       - name: Checkout repository
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
@@ -64,9 +41,6 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
-      - name: Cache build-runner generated files
-        id: generate-build-runner
-        uses: ./.github/actions/cache-build-runner
       - run: flutter pub get
       - run: flutter analyze
 
@@ -93,7 +67,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - security
-      - generate
     steps:
       - name: Checkout repository
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
@@ -104,9 +77,6 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
-      - name: Cache build-runner generated files
-        id: generate-build-runner
-        uses: ./.github/actions/cache-build-runner
       - run: flutter pub get
       - run: flutter test
       - name: Upload unit test results
@@ -127,7 +97,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - security
-      - generate
     steps:
       - name: Checkout repository
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
@@ -146,7 +115,4 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
-      - name: Cache build-runner generated files
-        id: generate-build-runner
-        uses: ./.github/actions/cache-build-runner
-      - run: flutter build appbundle --flavor dev --release
+      - run: flutter build appbundle --release
