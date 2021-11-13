@@ -115,4 +115,4 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: ${{ env.FLUTTER_CHANNEL }}
-      - run: flutter build appbundle --flavor dev --release
+      - run: flutter build appbundle --release
