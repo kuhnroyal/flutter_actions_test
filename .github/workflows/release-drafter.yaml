@@ -1,0 +1,35 @@
+name: Release Drafter
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  security_hardening:
+    name: Check security hardening
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43 #1.0.4
+
+  draft_release:
+    name: Draft a release
+    needs: security_hardening
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
+      - name: Get pubspec.yaml version
+        id: pubspec
+        uses: CumulusDS/get-yaml-paths-action@991236f580834c47372ba6bda1648add8bd63c21 #0.1.0
+        with:
+          file: pubspec.yaml
+          version: version
+      - name: Draft the release
+        id: release-drafter
+        uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
+        with:
+          version: ${{ steps.pubspec.outputs.version }}
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

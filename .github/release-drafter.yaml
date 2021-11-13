@@ -1,0 +1,22 @@
+categories:
+  - title: '🚀 Features'
+    labels:
+      - 'enhancement'
+      - 'feature'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+change-template: '* $TITLE — #$NUMBER'
+template: $CHANGES
+
+autolabeler:
+  - label: 'bug'
+    branch:
+      - '/(bug|hot))fix\/.+/'
+    title:
+      - '/fix/i'
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'

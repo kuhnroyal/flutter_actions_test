@@ -1,0 +1,22 @@
+name: Pull Request (Opened)
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  security_hardening:
+    name: Check security hardening
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43 #1.0.4
+
+  assign_author:
+    name: Assign Author to the Pull Request
+    needs: security_hardening
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Author to the Pull Request
+        uses: technote-space/assign-author@03ffe20c98bc808af5c7d47f3303d18186ebfba6 #1.5.3

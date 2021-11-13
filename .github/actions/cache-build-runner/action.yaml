@@ -1,0 +1,22 @@
+name: 'Cache build_runner'
+description: 'Cache generated build_runner files'
+inputs:
+  commitish:
+    description: "SHA or ref"
+    required: false
+    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+outputs:
+  cache-hit:
+    description: "Cache hit"
+    value: ${{ steps.generate-build-runner.outputs.cache-hit }}
+runs:
+  using: "composite"
+  steps:
+    - id: generate-build-runner
+      uses: actions/cache@c64c572235d810460d0d6876e9c705ad5002b353 #2.1.6
+      with:
+        key: build-runner-${{ inputs.commitish }}
+        path: |
+          lib/**/*.g.dart
+          lib/**/*.moor.dart
+          test/**/*.mocks.dart
