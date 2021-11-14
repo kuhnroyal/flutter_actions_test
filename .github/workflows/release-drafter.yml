@@ -3,6 +3,8 @@ name: Release Drafter
 on:
   push:
     branches: [ develop ]
+  pull_request:
+    types: [opened, reopened, synchronize]
 
 jobs:
   security_hardening:
@@ -29,7 +31,7 @@ jobs:
         id: release-drafter
         uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
         with:
-#          name: ${{ steps.pubspec.outputs.version }}
+          name: ${{ steps.pubspec.outputs.version }}
           version: ${{ steps.pubspec.outputs.version }}
           prerelease: true
         env:
