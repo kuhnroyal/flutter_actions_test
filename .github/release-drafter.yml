@@ -9,10 +9,7 @@ categories:
       - 'bugfix'
       - 'bug'
 change-template: '* $TITLE — #$NUMBER'
-template: |
-  ## Changes
-
-  $CHANGES
+template:  $CHANGES
 exclude-labels:
   - 'dependencies'
   - 'chore'
