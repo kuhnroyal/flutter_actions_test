@@ -27,12 +27,16 @@ jobs:
         with:
           file: pubspec.yaml
           version: version
+      - name: Get commit count
+        run: echo "::set-output name=count::$(git rev-list --count HEAD)"
+        id: commit
+      - run: git rev-list --count HEAD
       - name: Draft the release
         id: release-drafter
         uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
         with:
-          name: ${{ steps.pubspec.outputs.version }}
-          version: ${{ steps.pubspec.outputs.version }}
+          name: ${{ steps.pubspec.outputs.version }}+${{ steps.commit.outputs.count }}
+          version: ${{ steps.pubspec.outputs.version }}+${{ steps.commit.outputs.count }}
           prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
