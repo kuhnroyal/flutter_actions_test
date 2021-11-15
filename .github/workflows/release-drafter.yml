@@ -3,8 +3,6 @@ name: Release Drafter
 on:
   push:
     branches: [ develop ]
-  pull_request:
-    types: [opened, reopened, synchronize]
 
 jobs:
   security_hardening:
@@ -27,16 +25,16 @@ jobs:
         with:
           file: pubspec.yaml
           version: version
-      - name: Get commit count
-        run: echo "::set-output name=count::$(git rev-list --count HEAD)"
-        id: commit
-      - run: git rev-list --count HEAD
+      - name: Get version code
+        id: version_code
+        uses: lucasfe/version_code_generator@080bf5bc0931b5e4aa24e6fec93b035aa247cba9 #1.0.0
       - name: Draft the release
         id: release-drafter
         uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
         with:
-          name: ${{ steps.pubspec.outputs.version }}+${{ steps.commit.outputs.count }}
-          version: ${{ steps.pubspec.outputs.version }}+${{ steps.commit.outputs.count }}
+          disable-autolabeler: true
+          name: ${{ steps.pubspec.outputs.version }}+${{ steps.version_code.outputs.code }}
+          version: ${{ steps.pubspec.outputs.version }}+${{ steps.version_code.outputs.code }}
           prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
