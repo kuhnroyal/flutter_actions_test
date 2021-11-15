@@ -2,7 +2,7 @@ name: Pull Request (Opened)
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened, synchronize]
 
 jobs:
   security_hardening:
@@ -20,3 +20,15 @@ jobs:
     steps:
       - name: Assign Author to the Pull Request
         uses: technote-space/assign-author@03ffe20c98bc808af5c7d47f3303d18186ebfba6 #1.5.3
+
+  autolabel:
+    name: Autolabeling
+    needs: security_hardening
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
+      - name: Add labels
+        id: release-drafter
+        uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
