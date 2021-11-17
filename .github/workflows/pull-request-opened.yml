@@ -27,8 +27,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
+      - run: echo ${GITHUB_BASE_REF}
+      - run: echo ${{ github.base_ref }}
       - name: Add labels
         id: release-drafter
         uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
+        with:
+          config-name: release-drafter-${{ github.base_ref }}.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

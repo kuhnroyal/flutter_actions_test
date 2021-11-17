@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
-      - run: echo ${GITHUB_REF}
+      - run: echo ${GITHUB_REF_NAME}
       - name: Ensure SHA pinned actions
         uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43 #1.0.4
 
@@ -55,12 +55,12 @@ jobs:
         id: release-drafter
         uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
         with:
-          config-name: release-drafter-${GITHUB_REF}.yml
+          config-name: release-drafter-${GITHUB_REF_NAME}.yml
           disable-autolabeler: true
           name: ${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           version: ${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           tag: v${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           prerelease: true
-          commitish: ${GITHUB_REF}
+          commitish: ${GITHUB_REF_NAME}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
