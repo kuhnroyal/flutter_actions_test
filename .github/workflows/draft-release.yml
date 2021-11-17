@@ -2,7 +2,7 @@ name: Draft Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
   security_hardening:
@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
+      - run: echo ${GITHUB_REF}
       - name: Ensure SHA pinned actions
         uses: zgosalvez/github-actions-ensure-sha-pinned-actions@8877889a5717dad0b139f1d2925689aa68f88a43 #1.0.4
 
@@ -29,9 +30,9 @@ jobs:
         id: build-number
         with:
           script: |
-            const query = `query($owner:String!, $name:String!) {
+            const query = `query($owner:String!, $name:String!, $ref:String!) {
               repository(owner:$owner, name:$name){
-                defaultBranchRef {
+                ref(qualifiedName: $ref) {
                   target {
                     ... on Commit {
                       id
@@ -46,17 +47,20 @@ jobs:
             const variables = {
               owner: context.repo.owner,
               name: context.repo.repo,
+              ref: context.ref,
             }
             const result = await github.graphql(query, variables)
-            return result.repository.defaultBranchRef.target.history.totalCount
+            return result.repository.ref.target.history.totalCount
       - name: Draft the release
         id: release-drafter
         uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
         with:
+          config-name: release-drafter-${GITHUB_REF}.yml
           disable-autolabeler: true
           name: ${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           version: ${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           tag: v${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           prerelease: true
+          commitish: ${GITHUB_REF}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
