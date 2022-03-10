@@ -3,6 +3,7 @@ name: Pull Request (Opened)
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+    branches: [main, develop]
 
 jobs:
   security_hardening:
@@ -27,11 +28,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 #2.4.0
-      - run: echo ${GITHUB_BASE_REF}
-      - run: echo ${{ github.base_ref }}
       - name: Add labels
         id: release-drafter
-        uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4 #5.15.0
+        uses: release-drafter/release-drafter@e9ee02fbac03d922bac6212003695e8358dd88b0 #5.19.0
         with:
           config-name: release-drafter-${{ github.base_ref }}.yml
         env:

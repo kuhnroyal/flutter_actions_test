@@ -20,7 +20,7 @@ exclude-labels:
 autolabeler:
   - label: 'bug'
     branch:
-      - '/(bug|hot)fix\/.+/'
+      - '/(bug|hot)?fix\/.+/'
     title:
       - '/fix/i'
   - label: 'enhancement'
