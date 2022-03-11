@@ -18,7 +18,8 @@ jobs:
 
   verify_clean_release:
     name: Verify a clean release
-    needs: security_hardening
+    needs:
+      - security
     runs-on: ubuntu-latest
     steps:
       - name: The release should not have any existing assets

@@ -51,15 +51,14 @@ jobs:
             const result = await github.graphql(query, variables)
             return result.repository.ref.target.history.totalCount
       - name: Draft the release
-        id: release-drafter
         uses: release-drafter/release-drafter@e9ee02fbac03d922bac6212003695e8358dd88b0 #5.19.0
         with:
-          config-name: release-drafter-develop.yml
+          config-name: release-drafter.yml
           disable-autolabeler: true
           name:  Alpha ${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           version: alpha/${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
           tag: alpha/${{ steps.pubspec.outputs.version }}+${{ steps.build-number.outputs.result }}
-          prerelease: true
+          prerelease: false
           commitish: develop
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

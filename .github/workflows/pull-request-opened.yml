@@ -3,7 +3,7 @@ name: Pull Request (Opened)
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: [main, develop]
+    branches: [develop, beta, prod]
 
 jobs:
   security_hardening:

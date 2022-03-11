@@ -3,12 +3,14 @@ name: CI
 on:
   push:
     branches:
-      - main
       - develop
+      - beta
+      - prod
   pull_request:
     branches:
-      - main
       - develop
+      - beta
+      - prod
 
 env:
   FLUTTER_FORMAT_CMD: 'flutter format --set-exit-if-changed --line-length 150 .'
