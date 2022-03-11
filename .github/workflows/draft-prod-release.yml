@@ -2,7 +2,7 @@ name: Draft Beta Release
 
 on:
   push:
-    branches: [beta]
+    branches: [main]
 
 jobs:
   security_hardening:
@@ -25,13 +25,13 @@ jobs:
         with:
           file: pubspec.yaml
           version: version
-      - name: Draft beta release
+      - name: Draft release
         uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01 #1.9.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           allowUpdates: true
-          body: This is a beta release. Changelog needs to be loaded from store changelog files.
-          name:  Beta ${{ steps.pubspec.outputs.version }}
-          tag: beta/${{ steps.pubspec.outputs.version }}
-          commit: beta
+          body: This is a production release. Changelog needs to be loaded from store changelog files.
+          name:  ${{ steps.pubspec.outputs.version }}
+          tag: prod/${{ steps.pubspec.outputs.version }}
+          commit: main
           draft: true
